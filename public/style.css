@@ -1,11 +1,7 @@
-/******************************************************************************
-START Glitch hello-app default styles
-
-The styles in this section do some minimal CSS resets, set default fonts and
-colors, and handle the layout for our footer and "Remix on Glitch" button. If
-you're new to CSS they may seem a little complicated, but you can scroll down
-to this section's matching END comment to see page-specific styles.
-******************************************************************************/
+/* mashup of:
+- default Glitch app styles
+- Postmarks default
+- Steve Bate's styles https://bookmarks.stevebate.dev/ */
 
 @font-face {
   font-family: 'Public Sans';
@@ -335,4 +331,387 @@ textarea {
 
 .network-post {
   border-bottom: 1px solid #000000;
+}/******************************************************************************
+The styles in this section do some minimal CSS resets, set default fonts and
+colors, and handle the layout for our footer and "Remix on Glitch" button. If
+you're new to CSS they may seem a little complicated, but you can scroll down
+to this section's matching END comment to see page-specific styles.
+******************************************************************************/
+
+@font-face {
+  font-family: 'Public Sans';
+  src: url('/PublicSans-VariableFont_wght.ttf');
+}
+
+@font-face {
+  font-family: 'Public Sans';
+  font-style: italic;
+  src: url('/PublicSans-Italic-VariableFont_wght.ttf');
+}
+
+/* Our default values set as CSS variables */
+:root {
+  --color-bg: #222222;
+  --color-text-main: #ffffaa;
+  --color-primary: lightgray;
+  --color-logo: lightgray;
+  --color-header: orange;
+  --color-link: yellow;
+  --color-label: lightgray;
+  --color-desc: lightgray;
+  --color-tag: lightblue;
+  --wrapper-height: 40vh;
+  --image-max-width: 300px;
+  --image-margin: 3rem;
+  --font-family: "Public Sans", sans-serif;
+  --font-family-header: "Public Sans", sans-serif;
+}
+
+@media screen and (prefers-color-scheme: light) {
+  :root {
+    /* --color-bg: #FFE6F8;  */
+    --color-bg: white;
+    --color-text-main: #000000;
+    --color-primary: darkgray;
+    --color-logo: black;
+    --color-header: navy;
+    --color-link: blue;
+    --color-label: darkgray;
+    --color-desc: gray;
+    --color-tag: darkred;
+    --wrapper-height: 40vh;
+    --image-max-width: 300px;
+    --image-margin: 3rem;
+    --font-family: "Public Sans", sans-serif;
+    --font-family-header: "Public Sans", sans-serif;
+  }
+}
+
+
+/* Basic page style resets */
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Navigation grid */
+.footer {
+  display: flex;
+  /* justify-content: space-between; */
+  margin: 1rem auto 0;
+  padding: 1rem 0 0.75rem 0;
+  /* width: 100%; */
+  flex-wrap: wrap;
+  border-top: 2px solid #444;
+}
+
+a {
+  color: var(--color-link);
+}
+
+a:visited {
+  font-family: "Public Sans", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.1rem;
+  text-decoration: none;
+  border-style: none;
+}
+
+.footer a:hover {
+  color: var(--color-primary);
+}
+
+.footer .links {
+  padding: 0.5rem 1rem 1.5rem;
+  white-space: nowrap;
+}
+
+.divider {
+  padding: 0 1rem;
+}
+
+body {
+  font-family: "Public Sans", sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+}
+
+/* Page structure */
+.wrapper {
+  min-height: var(--wrapper-height);
+  display: grid;
+  grid-template-columns: 33.334% 66.667%;
+  margin: 0 1rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  max-width: 600px;
+}
+
+p,
+label {
+  font-size: 1.25rem;
+}
+
+label.small {
+  display: block;
+  font-weight: normal;
+  font-size: 0.8rem;
+}
+
+/* Title h1 style */
+h1 {
+  color: var(--color-header);
+  font-family: "Public Sans", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 105%;
+  margin: 2rem 0 0;
+  display: inline-block;
+}
+
+h1 a {
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--color-header) !important;
+}
+
+/* Very light scaling for our illustration */
+.illo-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.illustration {
+  max-width: 100%;
+  max-height: 150px;
+  margin-top: 1rem;
+}
+
+/* Styles for our poll form and its results */
+.poll-form,
+.poll-results {
+  background-color: #FFF3FC;
+  padding: 0 16px 16px 16px;
+  border-radius: 8px;
+}
+
+.poll-form button:hover {
+  cursor: pointer;
+  box-shadow: -8px 4px 20px var(--color-primary);
+}
+
+button,
+input {
+  font-family: inherit;
+  font-size: 100%;
+  background: #FFFFFF;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+label {
+  color: #000000;
+  font-weight: 500;
+}
+
+/* Instructions */
+.instructions {
+  margin: 1rem auto 0;
+}
+
+.instructions p {
+  font-size: 1rem;
+}
+
+h2 {
+  color: var(--color-header);
+}
+
+/* Admin page */
+table {
+  text-align: left;
+  border-collapse: collapse;
+  background-color: #FFF3FC;
+}
+
+td,
+th {
+  border: 2px solid #FFFFFF;
+  padding: 0.5rem;
+}
+
+a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+p.error,
+p.error a:link,
+p.error a:visited {
+  color: var(--color-link);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 96px 2fr 1fr;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.header .title {
+  height: 100%;
+}
+
+
+.header .logo svg {
+  stroke: var(--color-logo);
+  height: 6rem;
+  width: auto;
+  margin: .8rem;
+}
+
+.header .menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  gap: 15px;
+  margin-right: 20px;
+}
+
+.bookmark {
+  margin-bottom: 40px;
+}
+
+.bookmark .subhead {
+  margin-bottom: 10px;
+}
+
+.bookmark .subhead,
+.bookmark .bottom,
+.comment .top {
+  color: #707070;
+}
+
+.bookmark .tags a {
+  color: var(--color-tag);
+}
+
+.bookmark .description {
+  margin-bottom: 10px;
+  color: var(--color-desc);
+}
+
+.bookmark .tags a,
+.bookmark .bottom a {
+  font-weight: normal;
+  font-size: smaller;
+}
+
+.bookmark .tags {
+  margin-bottom: 4px;
+}
+
+textarea {
+  display: block;
+  height: 192px;
+  width: 75%;
+}
+
+.tag-list {
+  margin-top: 20px;
+}
+
+.tag-list ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.bio {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: 135px auto;
+}
+
+.bio .avatar {
+  width: 125px;
+}
+
+#taggedList {
+  display: flex;
+  gap: 5px;
+}
+
+#taggedList .tagged {
+  display: inline-grid;
+  height: 2em;
+  grid-template-columns: 1.5ch auto;
+  align-items: center;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 8px 0 0 8px;
+}
+
+#taggedList .tagged:before {
+  content: '#';
+}
+
+#taggedList .tagged:hover:before {
+  content: '\00d7';
+}
+
+.followers .follower {
+  display: grid;
+  grid-template-columns: 50% 40px;
+  align-items: center;
+}
+
+.followers .follower .actions {
+  height: auto;
+}
+
+.network-post {
+  border-bottom: 1px solid #000000;
+}
+
+form label {
+  color: var(--color-label);
+}
+
+form button {
+  margin-top: 0.5rem;
+}
+
+#credits {
+  color: var(--color-text-main);
+  font-size: smaller;
+}
+
+h2.fediverse-account {
+  color: var(--color-primary);
+  font-size: initial;
+}
+
+
+h2.fediverse-account label {
+  color: var(--color-header);
+  font-size: initial;
 }
