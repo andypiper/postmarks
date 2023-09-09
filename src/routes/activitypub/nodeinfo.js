@@ -47,7 +47,7 @@ router.get("/", async function (req, res) {
       openRegistrations: false,
       metadata: {}
     };
-    // name, version, and post stats should be dynamic
+    // activeMonth and activeHalfyear should be dynamic, currently static
     res.json(nodeInfo);
   }
 });
