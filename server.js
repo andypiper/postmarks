@@ -32,6 +32,8 @@ app.set("apDb", apDb);
 app.set("account", account);
 app.set("domain", domain);
 
+app.disable("x-powered-by");
+
 //force HTTPS in production
 if (process.env.ENVIRONMENT === "production") {
   app.set("trust proxy", ["127.0.0.1", "10.0.0.0/8"]);

@@ -1,3 +1,5 @@
+// implementation of http://nodeinfo.diaspora.software/protocol.html
+
 import express from "express";
 import {instanceType, instanceVersion} from "../../util.js";
 
@@ -21,8 +23,9 @@ router.get("/", async function (req, res) {
   if (req.originalUrl == "/nodeinfo/2.0") {
     
     const bookmarksDb = req.app.get("bookmarksDb");
-    let bookmarkcount = await bookmarksDb.getBookmarkCount();
+    let bookmarkCount = await bookmarksDb.getBookmarkCount();
     
+    // TODO: activeMonth and activeHalfyear should be dynamic, currently static
     let nodeInfo = {
       version: 2.0,
       software: {
@@ -42,12 +45,17 @@ router.get("/", async function (req, res) {
           activeMonth: 1,
           activeHalfyear: 1
         },
-        localPosts: bookmarkcount,
+        localPosts: bookmarkCount,
       },
       openRegistrations: false,
       metadata: {}
     };
-    // activeMonth and activeHalfyear should be dynamic, currently static
+    
+    // spec requires setting this, majority of implementations  
+    // appear to not bother with it?
+    res.type('application/json; profile="http://nodeinfo.diaspora.software/ns/schema/2.0#"')
+    
     res.json(nodeInfo);
+    
   }
 });
