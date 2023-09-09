@@ -36,7 +36,7 @@ router.get("/", async function (req, res) {
         "activitypub"
       ],
       services: {
-        outbound: [],
+        outbound: ["atom1.0"],
         inbound: []
       },
       usage: {
