@@ -86,7 +86,7 @@ router.get('/index.xml', async (req, res) => {
   } else {
     params.bookmarks = bookmarks.map((bookmark) => {
       const tagArray = bookmark.tags?.split(' ').map((b) => b.slice(1)) ?? [];
-      const createdAt = new Date(bookmark.created_at);
+      const createdAt = new Date(`${bookmark.created_at}Z`);
       return {
         tag_array: tagArray,
         ...bookmark,
@@ -186,7 +186,7 @@ router.get('/search', async (req, res) => {
     const params = { title: 'Search Bookmarks' };
     if (req.query.query) {
       params.keywords = req.query.query;
-      params.bookmarks = await bookmarksDb.searchBookmarks(req.query.query.split(' '));
+      params.bookmarks = await bookmarksDb.searchBookmarks(req.query.query);
       if (params.bookmarks.length === 0) {
         params.error = 'No matches...';
       }
