@@ -47,13 +47,13 @@ function addBookmarkDomain(bookmark) {
 }
 
 function insertRelativeTimestamp(object) {
- // timestamps created by SQLite's CURRENT_TIMESTAMP are in UTC regardless
- // of server setting, but don't actually indicate a timezone in the string
- // that's returned. Had I known this, I probably would have avoided
- // CURRENT_TIMESTAMP altogether, but since lots of people already have
- // databases full of bookmarks, in lieu of a full-on migration to go along
- // with a code change that sees JS-generated timestamps at the time of
- // SQLite INSERTs, we can just append the UTC indicator to the string when parsing it.
+  // timestamps created by SQLite's CURRENT_TIMESTAMP are in UTC regardless
+  // of server setting, but don't actually indicate a timezone in the string
+  // that's returned. Had I known this, I probably would have avoided
+  // CURRENT_TIMESTAMP altogether, but since lots of people already have
+  // databases full of bookmarks, in lieu of a full-on migration to go along
+  // with a code change that sees JS-generated timestamps at the time of
+  // SQLite INSERTs, we can just append the UTC indicator to the string when parsing it.
   return {
     timestamp: timeSince(new Date(`${object.created_at}Z`).getTime()),
     ...object,
@@ -143,7 +143,7 @@ open({
   } catch (dbError) {
     console.error(dbError);
   }
-  
+
   //
   // Create the FTS table
   // Putting it here so it will initialize existing
@@ -175,8 +175,6 @@ open({
   }
 });
 
-
-
 export async function getBookmarkCount() {
   const result = await db.get('SELECT count(id) as count FROM bookmarks');
   return result?.count;
@@ -201,9 +199,12 @@ export async function getBookmarks(limit = 10, offset = 0) {
 export async function getBookmarksForCSVExport() {
   // We use a try catch block in case of db errors
   try {
-    const results = await db.all('SELECT title,url,description,tags,created_at,updated_at from bookmarks');
-    // These titles should be updated if the query changes above.
-    const columnTitles = { title: 'title', url: 'url', description: 'description', tags: 'tags', created_at: 'created_at', updated_at: 'updated_at' };
+    const headers = ['title', 'url', 'description', 'tags', 'created_at', 'updated_at'];
+    const selectHeaders = headers.join(',');
+    // This will create an object where the keys and values match. This will
+    // allow the csv stringifier to interpret this as a header row.
+    const columnTitles = Object.fromEntries(headers.map((header) => [header, header]));
+    const results = await db.all(`SELECT ${selectHeaders} from bookmarks`);
     return [columnTitles].concat(results);
   } catch (dbError) {
     // Database connection error
@@ -214,7 +215,7 @@ export async function getBookmarksForCSVExport() {
 
 export async function getBookmarkCountForTags(tags) {
   const tagClauses = tags.map(() => `(tags like ? OR tags like ?)`).join(' AND ');
-  const tagParams = tags.map((tag) => [`%${tag}% `, `%${tag}%`]).flat();
+  const tagParams = tags.map((tag) => [`%#${tag} %`, `%#${tag}`]).flat();
   const result = await db.get.apply(db, [`SELECT count(id) as count from bookmarks WHERE ${tagClauses}`, ...tagParams]);
   return result?.count;
 }
@@ -223,7 +224,7 @@ export async function getBookmarksForTags(tags, limit = 10, offset = 0) {
   // We use a try catch block in case of db errors
   try {
     const tagClauses = tags.map(() => `(tags like ? OR tags like ?)`).join(' AND ');
-    const tagParams = tags.map((tag) => [`%${tag}% `, `%${tag}%`]).flat();
+    const tagParams = tags.map((tag) => [`%#${tag} %`, `%#${tag}`]).flat();
     const results = await db.all.apply(db, [
       `SELECT * from bookmarks WHERE ${tagClauses} ORDER BY updated_at DESC LIMIT ? OFFSET ?`,
       ...tagParams,
@@ -385,12 +386,12 @@ export async function deleteAllBookmarks() {
 }
 
 export async function searchBookmarks(keywords) {
- const results = await db.all(
-   'SELECT docid as id, * from bookmarks_fts WHERE title MATCH ? or description MATCH ? or url MATCH ? or tags MATCH ?',
-   keywords,
-   keywords,
-   keywords,
-   keywords,
- );
- return results.map((b) => massageBookmark(b));
+  const results = await db.all(
+    'SELECT docid as id, * from bookmarks_fts WHERE title MATCH ? or description MATCH ? or url MATCH ? or tags MATCH ?',
+    keywords,
+    keywords,
+    keywords,
+    keywords,
+  );
+  return results.map((b) => massageBookmark(b));
 }

@@ -23,7 +23,6 @@ To set your app up:
   - Edit the contents of `account.json.example` to set your `@username`, display name, bio, and avatar. (If you don't set a username, your default actor name will be 'bookmarks', so people will find you on the fediverse `@bookmarks@project-name.glitch.me`.)
   - THEN: either rename `account.json.example` to `account.json`, or copy the contents into a new file called `account.json`. Whatever `username` you have in this file when the project first starts you'll need to retain or else you'll break your followers' connection to this account.
 - Otherwise:
-  - Set up your domain by editing `src/util.js` and making the definition of `export const domain` return a string that is your domain. Fun, huh?
   - Create a `.env` file in the root of the project.
   - Add the line `PUBLIC_BASE_URL=<hostname>` to your .env where \<hostname\> is the hostname of your instance.
   - Add the line `ADMIN_KEY=<key>` to your .env where \<key\> is the password you'll enter when the browser prompts you, and another line for `SESSION_SECRET=<secret>` where \<secret\> is a random string used when hashing your session for use in a secure cookie.
@@ -36,9 +35,10 @@ To set your app up:
 
 Setting `MASTODON_ACCOUNT` in the `.env` file will cause a link to be added to the Postmarks home page that can be used for verification with your Mastodon account. See the [Mastodon documentation](https://docs.joinmastodon.org/user/profile/#verification) for more details.
 
-## Developing Postmarks
+## Development & Contributions
 
-- To automatically log all requests to a text file, set add `LOGGING_ENABLED=true` to your .env file. This will cause all incoming requests to append to `request_log.txt` in your project folder.
+See [CONTRIBUTING.md](/CONTRIBUTING.md) for more information on how to work with Postmarks' development environment as well
+as how to submit your changes for review.
 
 ## Acknowledgments
 

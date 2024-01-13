@@ -1,11 +1,12 @@
 import fetch from 'node-fetch';
 import crypto from 'crypto';
+import escapeHTML from 'escape-html';
 
 import { signedGetJSON, signedPostJSON } from './signature.js';
-import { actorInfo, actorMatchesUsername } from './util.js';
+import { actorInfo, actorMatchesUsername, replaceEmptyText } from './util.js';
 
 function getGuidFromPermalink(urlString) {
-  return urlString.match(/m\/([a-zA-Z0-9+/]+)/)[1];
+  return urlString.match(/(?:\/m\/)([a-zA-Z0-9+/]+)/)[1];
 }
 
 export async function signAndSend(message, name, domain, db, targetDomain, inbox) {
@@ -28,15 +29,41 @@ export function createNoteObject(bookmark, account, domain) {
   const guidNote = crypto.randomBytes(16).toString('hex');
   const d = new Date();
 
+  const updatedBookmark = bookmark;
+
+  updatedBookmark.title = escapeHTML(bookmark.title);
+  updatedBookmark.description = escapeHTML(bookmark.description);
+
+  let linkedTags = '';
+
+  if (bookmark.tags && bookmark.tags.length > 0) {
+    linkedTags = bookmark.tags
+      ?.split(' ')
+      .map((tag) => {
+        const tagName = tag.slice(1);
+        return `<a href="https://${domain}/tagged/${tagName}" class="mention hashtag" rel="tag nofollow noopener noreferrer">${tag}</a>`;
+      })
+      .join(' ');
+  }
+
+  if (updatedBookmark.description?.trim().length > 0) {
+    updatedBookmark.description = `<br/>${updatedBookmark.description?.trim().replace('\n', '<br/>') || ''}`;
+  }
+
+  if (linkedTags.trim().length > 0) {
+    linkedTags = `<p>${linkedTags}</p>`;
+  }
+
   const noteMessage = {
     '@context': 'https://www.w3.org/ns/activitystreams',
     id: `https://${domain}/m/${guidNote}`,
     type: 'Note',
     published: d.toISOString(),
     attributedTo: `https://${domain}/u/${account}`,
-    content: `
-      <strong><a href="${bookmark.url}">${bookmark.title}</a></strong><br/>
-      ${bookmark.description?.replace('\n', '<br/>') || ''}`,
+    content: `<p><strong><a href="${updatedBookmark.url}" rel="nofollow noopener noreferrer">${replaceEmptyText(
+      updatedBookmark.title,
+      updatedBookmark.url,
+    )}</a></strong>${updatedBookmark.description}</p>${linkedTags}`,
     to: [`https://${domain}/u/${account}/followers/`, 'https://www.w3.org/ns/activitystreams#Public'],
     tag: [],
   };

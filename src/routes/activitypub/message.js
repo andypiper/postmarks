@@ -1,5 +1,5 @@
 import express from 'express';
-import { synthesizeActivity } from '../../activitypub.js'
+import { synthesizeActivity } from '../../activitypub.js';
 
 const router = express.Router();
 
@@ -11,6 +11,7 @@ router.get('/:guid', async (req, res) => {
     guid = guid.slice(2);
     isActivity = true;
   }
+
   if (!guid) {
     return res.status(400).send('Bad request.');
   }
