@@ -4,7 +4,7 @@
 
 - [ActivityPub](https://www.w3.org/TR/activitypub/) (Server-to-Server)
 - [WebFinger](https://webfinger.net/)
-- [Http Signatures](https://datatracker.ietf.org/doc/html/draft-cavage-http-signatures)
+- [HTTP Signatures](https://datatracker.ietf.org/doc/html/draft-cavage-http-signatures)
 - [NodeInfo](https://nodeinfo.diaspora.software/)
 
 ## Supported FEPs
@@ -25,8 +25,7 @@
 
 ### Actor
 
-Postmarks is a single-actor ActivityPub server. To interact with the actor you must know
-the actor URI or the Mastodon-compatible account name (@username@domain).
+Postmarks is a single-actor ActivityPub server. To interact with the actor you must know the actor URI or the Mastodon-compatible account name (@username@domain).
 
 Followers of the Postmarks actor will receive ActivityPub activities to notify them when bookmarks are added, updated or deleted.
 

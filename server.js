@@ -1,13 +1,17 @@
 import * as dotenv from 'dotenv';
 import express from 'express';
+// import helmet from 'helmet';
 import cors from 'cors';
 import { create } from 'express-handlebars';
 import escapeHTML from 'escape-html';
+
 
 import { domain, account, simpleLogger, actorInfo, replaceEmptyText } from './src/util.js';
 import session, { isAuthenticated } from './src/session-auth.js';
 import * as bookmarksDb from './src/bookmarks-db.js';
 import * as apDb from './src/activity-pub-db.js';
+// import isBot from './src/detect-bot.js'
+import { errorLogger, errorResponder, invalidPathHandler } from './src/error-handler.js';
 
 import routes from './src/routes/index.js';
 
@@ -16,11 +20,15 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+
+// app.use(helmet({ xFrameOptions: false, }));
+
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.json({ type: 'application/activity+json' }));
 app.use(session());
+//app.use(isBot);
 
 app.use((req, res, next) => {
   res.locals.loggedIn = req.session.loggedIn;
@@ -73,6 +81,10 @@ const hbs = create({
     projectUrl() {
       return `https://${app.get('domain')}`;
     },
+    searchUrl() {
+      return `https://${app.get('domain')}/opensearch.xml`;
+    },
+
     glitchProjectName() {
       return process.env.PROJECT_DOMAIN;
     },
@@ -125,5 +137,13 @@ app.use('/', routes.core);
 app.use('/api/inbox', cors(), routes.inbox);
 app.use('/.well-known/nodeinfo', routes.nodeinfo);
 app.use('/nodeinfo/2.0', routes.nodeinfo);
+app.use('/nodeinfo/2.1', routes.nodeinfo);
+app.use('/opensearch.xml', routes.opensearch);
+
+// app.use(errorLogger);
+// app.use(errorResponder);
+app.use(invalidPathHandler);
+
+// TODO: add a nicer error handler
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));

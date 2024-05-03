@@ -1,0 +1,41 @@
+{
+  "name": "Pipesmarks",
+  "short_name": "Postmarks",
+  "description": "A single-user bookmarking website designed to live on the Fediverse",
+  "icons": [
+    {
+      "type": "image/png",
+      "src": "/postmarks-logo-small.png",
+      "sizes": "250x250"
+    },
+    {
+      "type": "image/png",
+      "src": "/postmarks-logo.png",
+      "sizes": "1600x1600",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "silver",
+  "background_color": "lightgray",
+  "display": "standalone",
+  "orientation": "any",
+  "dir": "auto",
+  "start_url": "/",
+  "id": "/",
+  "shortcuts": [
+    {
+      "name": "Add bookmark",
+      "short_name": "Add",
+      "description": "Add a new entry to your Postmarks",
+      "url": "/bookmark/new?utm_source=pwa",
+      "icons": [{ "src": "/feed-icon.png", "sizes": "1200x1200" }]
+    },
+    {
+      "name": "Search bookmarks",
+      "short_name": "Search",
+      "description": "Search your Postmarks",
+      "url": "/search?utm_source=pwa",
+      "icons": [{ "src": "/feed-icon.png", "sizes": "1200x1200" }]
+    }
+  ]
+}

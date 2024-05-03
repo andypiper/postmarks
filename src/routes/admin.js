@@ -209,6 +209,7 @@ router.post('/following/follow', isAuthenticated, async (req, res) => {
 
     if (inbox) {
       const followMessage = await createFollowMessage(account, domain, canonicalUrl, db);
+
       signAndSend(followMessage, account, domain, db, req.body.actor.split('@').slice(-1), inbox);
     }
 

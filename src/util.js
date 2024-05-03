@@ -132,10 +132,11 @@ export function simpleLogger(req, res, next) {
   const { method } = req;
   const { url } = req;
   const status = res.statusCode;
+  const userAgent = req.headers['user-agent']
   const start = process.hrtime();
   const durationInMilliseconds = getActualRequestDurationInMilliseconds(start);
 
-  const log = `[${chalk.blue(formattedDate)}] ${method}:${url} ${status} ${chalk.red(`${durationInMilliseconds.toLocaleString()}ms`)}`;
+  const log = `[${chalk.blue(formattedDate)}] ${method}:${url} ${status} ${chalk.red(`${durationInMilliseconds.toLocaleString()}ms`)} - ${userAgent}`;
   console.log(log);
   if (process.env.LOGGING_ENABLED === 'true') {
     fs.appendFile('request_logs.txt', `${log}\n`, (err) => {

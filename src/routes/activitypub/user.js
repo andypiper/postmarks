@@ -31,6 +31,8 @@ router.get('/:name', async (req, res) => {
   if (tempActor.outbox === undefined) {
     tempActor.outbox = `https://${domain}/u/${username}/outbox`;
   }
+  // temp quick fix for https://github.com/ckolderup/postmarks/issues/191
+  res.type('application/ld+json; profile="https://www.w3.org/ns/activitystreams"');
   return res.json(tempActor);
 });
 

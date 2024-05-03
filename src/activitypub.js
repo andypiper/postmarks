@@ -151,6 +151,7 @@ export async function createFollowMessage(account, domain, target, db) {
   };
 
   db.insertMessage(guid, null, JSON.stringify(followMessage));
+  console.log(followMessage);
 
   return followMessage;
 }
@@ -196,8 +197,9 @@ export async function lookupActorInfo(actorUsername) {
   const parsedDomain = actorUsername.split('@').slice(-1);
   const parsedUsername = actorUsername.split('@').slice(-2, -1);
   try {
-    const response = await fetch(`https://${parsedDomain}/.well-known/webfinger/?resource=acct:${parsedUsername}@${parsedDomain}`);
+    const response = await fetch(`https://${parsedDomain}/.well-known/webfinger?resource=acct:${parsedUsername}@${parsedDomain}`);
     const data = await response.json();
+
     const selfLink = data.links.find((o) => o.rel === 'self');
     if (!selfLink || !selfLink.href) {
       throw new Error();

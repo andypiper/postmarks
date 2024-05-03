@@ -1,0 +1,32 @@
+# See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+
+User-Agent: ImagesiftBot
+Crawl-delay: 30
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: DataForSeoBot
+Crawl-delay: 100
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: *
+Crawl-delay: 30
+Disallow: /admin
+Disallow: /api/inbox
+Disallow: /bookmark/
+Disallow: /comment
+Disallow: /login
+Disallow: /logout
+Disallow: /m/
+Disallow: /network
+Disallow: /search
+Disallow: /tagged/
+Disallow: /u/
